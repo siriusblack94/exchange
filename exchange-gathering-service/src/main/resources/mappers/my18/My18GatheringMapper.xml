@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.blockeng.gathering.mapper.my18.My18GatheringMapper">
+
+    <resultMap id="BaseResultMap" type="com.blockeng.gathering.entity.My18Gathering">
+        <id column="O_id" property="O_id"/>
+        <result column="o_time" property="o_time"/>
+        <result column="U_id" property="U_id"/>
+        <result column="M_name" property="M_name"/>
+        <result column="addmoney" property="addmoney"/>
+        <result column="H_fee" property="H_fee"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+         U_id referenceId,o_time makeMoneyTime,O_id seqID,M_name moneyMaker,addmoney,H_fee poundage
+    </sql>
+    
+    <select id="getGatheringInfoByRefenenceId" parameterType="Integer" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM my18_pay_temp
+        WHERE U_id = #{referenceId}
+    </select>
+
+
+</mapper>

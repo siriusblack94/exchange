@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.blockeng.gathering.mapper.my18.My18CashRechargeSynMapper">
+
+    <resultMap id="BaseResultMap" type="com.blockeng.gathering.entity.CashRechargeSyn">
+        <id column="order_Id" property="order_Id"/>
+        <result column="remark" property="remark"/>
+        <result column="plateform_Id" property="plateform_Id"/>
+        <result column="created" property="created"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+         order_Id AS orderId,remark,plateform_Id AS plateformId,created
+    </sql>
+    
+    <select id="getMaxTimeData" parameterType="string" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM cash_recharge_syn
+        WHERE plateform_Id=#{plateformId}
+        ORDER BY created
+        DESC
+        LIMIT 0,1;
+    </select>
+    <insert id="synOrderInfo" parameterType="java.util.List">
+        insert into cash_recharge_syn
+        (order_id, plateform_id,remark,created )
+        values
+        <foreach collection ="list" item="cashRechargeSyn" index= "index" separator =",">
+        (
+          #{cashRechargeSyn.orderId},
+          #{cashRechargeSyn.plateformId},
+          #{cashRechargeSyn.remark},
+          #{cashRechargeSyn.created}
+        )
+        </foreach >
+    </insert>
+    <!-- 批量删除 -->
+    <delete id="cleanDataOutOfDate" parameterType="java.util.Date">
+        delete from cash_recharge_syn
+        where
+        <![CDATA[ created < #{paramTime} ]]>
+    </delete>
+
+</mapper>
